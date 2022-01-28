@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,12 +24,12 @@ class CloudStorageApplicationTests {
 
 	@BeforeAll
 	static void beforeAll() {
-		WebDriverManager.chromedriver().setup();
+		WebDriverManager.firefoxdriver().setup();
 	}
 
 	@BeforeEach
 	public void beforeEach() {
-		this.driver = new ChromeDriver();
+		this.driver = new FirefoxDriver();
 	}
 
 	@AfterEach
@@ -42,6 +43,68 @@ class CloudStorageApplicationTests {
 	public void getLoginPage() {
 		driver.get("http://localhost:" + this.port + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
+	}
+
+	@Test
+	public void verifyUnauthorizedAcessRestrictions(){
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/signup");
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+
+		getLoginPage();
+	}
+
+	public void doLogout(){
+		driver.get("http://localhost:" + this.port + "/home");
+		WebElement buttonSignUp = driver.findElement(By.id("logout-button"));
+		buttonSignUp.click();
+	}
+
+	@Test
+	public void signUpLoginLogout(){
+		String firstName = "Max";
+		String lastName = "Mustermann";
+		String userName = "mamu";
+		String password = "mamu";
+
+		doMockSignUp(firstName,lastName,userName,password);
+
+		doLogIn(userName, password);
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		doLogout();
+
+		verifyUnauthorizedAcessRestrictions();
+	}
+
+	public void navToNotes(){
+		driver.get("http://localhost:" + this.port + "/home");
+		WebElement buttonSignUp = driver.findElement(By.id("logout-button"));
+		buttonSignUp.click();
+	}
+
+	// TODO
+	@Test
+	public void addNote() throws InterruptedException {
+		String firstName = "Note";
+		String lastName = "Nerd";
+		String userName = "none";
+		String password = "none";
+
+		doMockSignUp(firstName,lastName,userName,password);
+
+		doLogIn(userName, password);
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/home");
+
+		WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
+
+		addNoteButton.click();
+
+		Thread.sleep(5000);
 	}
 
 	/**
