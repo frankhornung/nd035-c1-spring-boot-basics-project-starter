@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 //@RequestMapping("/home")
 public class HomeController {
@@ -30,6 +32,8 @@ public class HomeController {
         //model.addAttribute("noteDescription", "Hurz ist von Hape Kerkeling");
         System.out.println("GET Title: " +  note.getNoteTitle());
         System.out.println("GET Description: " + note.getNoteDescription());
+        //allNotes = noteService.getAllNotes();
+        model.addAttribute("allNotes", noteService.getAllNotes());
         return "home";
     }
 

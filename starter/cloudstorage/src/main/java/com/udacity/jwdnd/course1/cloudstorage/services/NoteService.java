@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 public class NoteService {
@@ -25,6 +26,11 @@ public class NoteService {
         // returns the id of created node as received from noteMapper
         System.out.println("NoteService createNote called");
         return noteMapper.insert(note);
+    }
+
+    public List<Note> getAllNotes(){
+        System.out.println("get all notes called");
+        return noteMapper.getAllNotes();
     }
 
 }

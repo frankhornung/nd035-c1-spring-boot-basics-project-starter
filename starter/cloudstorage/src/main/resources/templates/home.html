@@ -83,6 +83,14 @@
                                         <th scope="row">Example Note Title</th>
                                         <td>Example Note Description </td>
                                     </tr>
+                                    <tr th:each="note : ${allNotes}">
+                                        <td>
+                                            <button type="button" class="btn btn-success">Edit</button>
+                                            <a class="btn btn-danger">Delete</a>
+                                        </td>
+                                        <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
+                                        <td th:text="${note.noteDescription}">Example Note Description </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -112,7 +120,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
+                                        <button id="save-new-note-button" type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>

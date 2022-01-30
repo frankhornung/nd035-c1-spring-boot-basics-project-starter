@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -88,7 +91,7 @@ class CloudStorageApplicationTests {
 
 	// TODO
 	@Test
-	public void addNote() throws InterruptedException {
+	public void addFiveNotes() throws InterruptedException {
 		String firstName = "Note";
 		String lastName = "Nerd";
 		String userName = "none";
@@ -99,6 +102,32 @@ class CloudStorageApplicationTests {
 		doLogIn(userName, password);
 		Assertions.assertEquals("Home", driver.getTitle());
 
+		List<String> iterationMessage = Arrays.asList("FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH");
+		for (String noteText : iterationMessage){
+			// open notes-tab
+			driver.get("http://localhost:" + this.port + "/home");
+			WebElement notesTab = driver.findElement(By.id("nav-notes-tab"));
+			notesTab.click();
+
+			// locate the add-note button
+			WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
+			addNoteButton.click();
+
+			// enter the new note and submit
+			WebElement noteTitleInput = driver.findElement(By.id("note-title"));
+			WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
+			noteTitleInput.click();
+			String title = noteText + " example note";
+			noteTitleInput.sendKeys(title);
+
+			String description = "This is a " + noteText + "  example note that should show up in the notes list after it was added";
+			noteDescriptionInput.click();
+			noteDescriptionInput.sendKeys(description);
+			WebElement noteSubmitButton = driver.findElement(By.id("save-new-note-button"));
+			noteSubmitButton.click();
+
+		}
+
 		driver.get("http://localhost:" + this.port + "/home");
 
 		WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
@@ -108,7 +137,7 @@ class CloudStorageApplicationTests {
 		//Thread.sleep(5000);
 		//Actions actions = new Actions(driver);
 		//actions.moveToElement(addNoteButton);
-
+/*
 		addNoteButton.click();
 		WebElement noteTitleInput = driver.findElement(By.id("note-title"));
 		WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
@@ -116,8 +145,14 @@ class CloudStorageApplicationTests {
 		noteTitleInput.sendKeys("First example note");
 		noteDescriptionInput.click();
 		noteDescriptionInput.sendKeys("This is a first example note that should show up in the notes list after it was added");
-
-		//Thread.sleep(5000);
+		WebElement noteSubmitButton = driver.findElement(By.id("save-new-note-button"));
+		noteSubmitButton.click();
+*/
+		Thread.sleep(5000);
+		driver.get("http://localhost:" + this.port + "/home");
+		notesTab = driver.findElement(By.id("nav-notes-tab"));
+		notesTab.click();
+		Thread.sleep(5000);
 	}
 
 	/**
