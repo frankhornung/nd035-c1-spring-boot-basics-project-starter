@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -101,10 +102,22 @@ class CloudStorageApplicationTests {
 		driver.get("http://localhost:" + this.port + "/home");
 
 		WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
+		WebElement notesTab = driver.findElement(By.id("nav-notes-tab"));
+		notesTab.click();
+
+		//Thread.sleep(5000);
+		//Actions actions = new Actions(driver);
+		//actions.moveToElement(addNoteButton);
 
 		addNoteButton.click();
+		WebElement noteTitleInput = driver.findElement(By.id("note-title"));
+		WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
+		noteTitleInput.click();
+		noteTitleInput.sendKeys("First example note");
+		noteDescriptionInput.click();
+		noteDescriptionInput.sendKeys("This is a first example note that should show up in the notes list after it was added");
 
-		Thread.sleep(5000);
+		//Thread.sleep(5000);
 	}
 
 	/**
