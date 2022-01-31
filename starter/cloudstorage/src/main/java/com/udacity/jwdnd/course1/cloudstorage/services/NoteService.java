@@ -38,4 +38,9 @@ public class NoteService {
         noteMapper.deleteNoteById(noteId);
     }
 
+    public void updateNote(Note note){
+        System.out.println("update note with id" + note.getNoteId().toString());
+        noteMapper.updateNote(note);
+    }
+
 }

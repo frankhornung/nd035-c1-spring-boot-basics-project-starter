@@ -49,17 +49,25 @@ public class HomeController {
     }
 */
     @PostMapping("/home/notemodal")
-    public String creatNoteHomePage(@ModelAttribute("noteObject") Note note, Authentication authentication, Model model) {
+    public String submitNote(@ModelAttribute("noteObject") Note note, Authentication authentication, Model model) {
         //System.out.println("POST Title: " + note.getNoteTitle());
         //System.out.println("POST Description: " + note.getNoteDescription());
 
-        // unused
+        if (note.getNoteId() != null){
+            System.out.println("noteId is: " + note.getNoteId().toString());
+            noteService.updateNote(note);
+        }
+        else{
+            System.out.println("noteId is NULL");
+            // retrieve the userId from the Database
+            User currentUser = userService.getUser(authentication.getName());
+            note.setUserId(currentUser.getUserId());
+            noteService.createNote(note);
+        }
+
         model.addAttribute("allNotes", noteService.getAllNotes());
 
-        // retrieve the userId from the Database
-        User currentUser = userService.getUser(authentication.getName());
-        note.setUserId(currentUser.getUserId());
-        noteService.createNote(note);
+
         return "home";
     }
 }

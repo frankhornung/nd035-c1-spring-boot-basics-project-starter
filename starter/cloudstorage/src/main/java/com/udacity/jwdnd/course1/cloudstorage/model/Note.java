@@ -44,6 +44,12 @@ public class Note {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    public void printAll(){
+        System.out.println("UserId:" + this.userId.toString());
+        System.out.println("UserId:" + this.userId.toString());
+        System.out.println("UserId:" + this.userId.toString());
+    }
 }
 
 
