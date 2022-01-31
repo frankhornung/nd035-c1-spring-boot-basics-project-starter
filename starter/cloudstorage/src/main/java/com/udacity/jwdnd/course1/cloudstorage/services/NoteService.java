@@ -33,4 +33,9 @@ public class NoteService {
         return noteMapper.getAllNotes();
     }
 
+    public void deleteNoteById(Integer noteId){
+        System.out.println("delete note with id" + noteId.toString());
+        noteMapper.deleteNoteById(noteId);
+    }
+
 }

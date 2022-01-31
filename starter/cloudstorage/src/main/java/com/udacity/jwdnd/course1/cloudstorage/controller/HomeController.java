@@ -36,11 +36,25 @@ public class HomeController {
         model.addAttribute("allNotes", noteService.getAllNotes());
         return "home";
     }
+/*
+    @GetMapping("/home/editNote")
+    public String editNote(@ModelAttribute("noteObject") Note note, Model model) {
+        //model.addAttribute("noteTitle", "hurz");
+        //model.addAttribute("noteDescription", "Hurz ist von Hape Kerkeling");
+        System.out.println("GET Title: " +  note.getNoteTitle());
+        System.out.println("GET Description: " + note.getNoteDescription());
+        //allNotes = noteService.getAllNotes();
+        model.addAttribute("allNotes", noteService.getAllNotes());
+        return "home";
+    }
+*/
+    @PostMapping("/home/notemodal")
+    public String creatNoteHomePage(@ModelAttribute("noteObject") Note note, Authentication authentication, Model model) {
+        //System.out.println("POST Title: " + note.getNoteTitle());
+        //System.out.println("POST Description: " + note.getNoteDescription());
 
-    @PostMapping("/home/formnote")
-    public String postHomePage(@ModelAttribute("noteObject") Note note, Authentication authentication, Model model) {
-        System.out.println("POST Title: " + note.getNoteTitle());
-        System.out.println("POST Description: " + note.getNoteDescription());
+        // unused
+        model.addAttribute("allNotes", noteService.getAllNotes());
 
         // retrieve the userId from the Database
         User currentUser = userService.getUser(authentication.getName());
