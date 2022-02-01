@@ -33,6 +33,11 @@ public class NoteService {
         return noteMapper.getAllNotes();
     }
 
+    public List<Note> getAllNotesForUid(Integer uid){
+        System.out.println("get all notes for uid called");
+        return noteMapper.getAllNotesForUid(uid);
+    }
+
     public void deleteNoteById(Integer noteId){
         System.out.println("delete note with id" + noteId.toString());
         noteMapper.deleteNoteById(noteId);
