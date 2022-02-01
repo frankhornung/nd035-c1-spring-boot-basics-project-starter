@@ -148,11 +148,11 @@ class CloudStorageApplicationTests {
 		WebElement noteSubmitButton = driver.findElement(By.id("save-new-note-button"));
 		noteSubmitButton.click();
 */
-		Thread.sleep(5000);
+		//Thread.sleep(5000);
 		driver.get("http://localhost:" + this.port + "/home");
 		notesTab = driver.findElement(By.id("nav-notes-tab"));
 		notesTab.click();
-		Thread.sleep(5000);
+		Thread.sleep(100000);
 	}
 
 	/**

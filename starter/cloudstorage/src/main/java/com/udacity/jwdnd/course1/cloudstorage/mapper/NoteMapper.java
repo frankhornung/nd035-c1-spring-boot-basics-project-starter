@@ -11,7 +11,7 @@ public interface NoteMapper {
     Note getNoteById(Integer noteId);
 
     @Delete("DELETE FROM NOTES WHERE noteId = #{noteid}")
-    Note deleteNoteById(Integer noteId);
+    void deleteNoteById(Integer noteId);
 
     @Insert("INSERT INTO NOTES (noteId, noteTitle, noteDescription, userId) VALUES(#{noteId}, #{noteTitle}, #{noteDescription}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "noteId")

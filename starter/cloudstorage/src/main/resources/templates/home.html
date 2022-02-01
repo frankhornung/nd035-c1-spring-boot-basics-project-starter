@@ -86,7 +86,7 @@
                                     <tr th:each="note : ${allNotes}" th:id="${note.noteId}">
                                         <td>
                                             <button th:data1="${note.noteTitle}" th:data2="${note.noteDescription}" type="button" class="btn btn-success" th:onclick="'showNoteModal('+ ${note.noteId} + ',' + 'this.getAttribute(\'data1\')' + ',' + 'this.getAttribute(\'data2\')' + ')'">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <a class="btn btn-danger" id="delete-button" th:href="@{/notedelete(noteId=${note.noteId})}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
                                         <td th:text="${note.noteDescription}">Example Note Description </td>
@@ -106,7 +106,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" th:object="${noteObject}" th:action="@{/home/notemodal}" method="POST">
+                                        <form action="#" th:object="${noteObject}" th:action="@{/notesubmit}" method="POST">
                                             <input th:field="*{noteId}" th:value="*{noteId}" type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
