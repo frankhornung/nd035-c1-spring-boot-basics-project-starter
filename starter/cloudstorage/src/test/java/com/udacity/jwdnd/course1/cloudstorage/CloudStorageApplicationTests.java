@@ -85,11 +85,132 @@ class CloudStorageApplicationTests {
 
 	public void navToNotes(){
 		driver.get("http://localhost:" + this.port + "/home");
-		WebElement buttonSignUp = driver.findElement(By.id("logout-button"));
-		buttonSignUp.click();
+		WebElement notesTab = driver.findElement(By.id("nav-notes-tab"));
+		notesTab.click();
 	}
 
-	// TODO
+	public void submitNote(String title, String description){
+		WebElement noteTitleInput = driver.findElement(By.id("note-title"));
+		WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
+		noteTitleInput.click();
+		noteTitleInput.clear();
+		noteTitleInput.sendKeys(title);
+		noteDescriptionInput.click();
+		noteDescriptionInput.clear();
+		noteDescriptionInput.sendKeys(description);
+		WebElement noteSubmitButton = driver.findElement(By.id("save-new-note-button"));
+		noteSubmitButton.click();
+	}
+
+	public void addNote(String title, String description){
+		// open notes-tab
+		navToNotes();
+
+		// locate the add-note button
+		WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
+		addNoteButton.click();
+
+		// enter the new note and submit
+		submitNote(title,description);
+	}
+
+	public void editNote(Integer noteId, String title, String description){
+		// open notes-tab
+		navToNotes();
+
+		// locate the add-note button
+		WebElement editNoteButton = driver.findElement(By.id("note-edit-" + noteId.toString()));
+		editNoteButton.click();
+
+		// enter the new note and submit
+		submitNote(title,description);
+	}
+
+	@Test
+	public void addNoteWithVerification() throws InterruptedException{
+		String firstName = "Note";
+		String lastName = "Nerd";
+		String userName = "none";
+		String password = "none";
+
+		String title = "Title";
+		String description = "Description";
+
+		doMockSignUp(firstName,lastName,userName,password);
+		doLogIn(userName, password);
+		Assertions.assertEquals("Home", driver.getTitle());
+		addNote(title,description);
+
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+
+		WebElement firstNoteTitle = driver.findElement(By.id("note-title-1"));
+		WebElement firstNoteDesc = driver.findElement(By.id("note-description-1"));
+		Assertions.assertEquals(title,firstNoteTitle.getText());
+		Assertions.assertEquals(description,firstNoteDesc.getText());
+
+		//Thread.sleep(100000);
+	}
+	@Test
+	public void deleteNoteWithVerification() throws InterruptedException {
+
+		try {
+			addNoteWithVerification();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+
+		Boolean isPresent =  driver.findElements(By.id("note-title-1")).size() > 0;
+		Assertions.assertTrue(driver.findElements(By.id("note-title-1")).size() > 0);
+		driver.get("http://localhost:" + this.port + "/notedelete?noteId=1");
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+		Assertions.assertFalse(driver.findElements(By.id("note-title-1")).size() > 0);
+
+	}
+
+	@Test
+	public void editNoteWithVerification(){
+		String title = "Title";
+		String changedTitle = "changed Title";
+		String description = "Description";
+		String changedDescription = "changed Description";
+
+		try {
+			addNoteWithVerification();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+
+		// repeat existing tests from add-note stage
+		WebElement firstNoteTitle = driver.findElement(By.id("note-title-1"));
+		WebElement firstNoteDesc = driver.findElement(By.id("note-description-1"));
+		Assertions.assertEquals(title,firstNoteTitle.getText());
+		Assertions.assertEquals(description,firstNoteDesc.getText());
+
+		WebElement editButton = driver.findElement(By.id("note-edit-1"));
+		editButton.click();
+
+		editNote(1,changedTitle,changedDescription);
+
+		//WebDriverWait webDriverWait = new WebDriverWait(driver, 3);
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+
+		//webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("note-title-1")));
+		//webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("note-description-1")));
+
+		WebElement changedNoteTitle = driver.findElement(By.id("note-title-1"));
+		WebElement changedNoteDesc = driver.findElement(By.id("note-description-1"));
+		Assertions.assertEquals(changedTitle,changedNoteTitle.getText());
+		Assertions.assertEquals(changedDescription,changedNoteDesc.getText());
+
+	}
+
 	@Test
 	public void addFiveNotes() throws InterruptedException {
 		String firstName = "Note";
@@ -104,55 +225,9 @@ class CloudStorageApplicationTests {
 
 		List<String> iterationMessage = Arrays.asList("FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH");
 		for (String noteText : iterationMessage){
-			// open notes-tab
-			driver.get("http://localhost:" + this.port + "/home");
-			WebElement notesTab = driver.findElement(By.id("nav-notes-tab"));
-			notesTab.click();
-
-			// locate the add-note button
-			WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
-			addNoteButton.click();
-
-			// enter the new note and submit
-			WebElement noteTitleInput = driver.findElement(By.id("note-title"));
-			WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
-			noteTitleInput.click();
-			String title = noteText + " example note";
-			noteTitleInput.sendKeys(title);
-
-			String description = "This is a " + noteText + "  example note that should show up in the notes list after it was added";
-			noteDescriptionInput.click();
-			noteDescriptionInput.sendKeys(description);
-			WebElement noteSubmitButton = driver.findElement(By.id("save-new-note-button"));
-			noteSubmitButton.click();
-
+			addNote(noteText,noteText);
 		}
-
-		driver.get("http://localhost:" + this.port + "/home");
-
-		WebElement addNoteButton = driver.findElement(By.id("add-note-button"));
-		WebElement notesTab = driver.findElement(By.id("nav-notes-tab"));
-		notesTab.click();
-
-		//Thread.sleep(5000);
-		//Actions actions = new Actions(driver);
-		//actions.moveToElement(addNoteButton);
-/*
-		addNoteButton.click();
-		WebElement noteTitleInput = driver.findElement(By.id("note-title"));
-		WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
-		noteTitleInput.click();
-		noteTitleInput.sendKeys("First example note");
-		noteDescriptionInput.click();
-		noteDescriptionInput.sendKeys("This is a first example note that should show up in the notes list after it was added");
-		WebElement noteSubmitButton = driver.findElement(By.id("save-new-note-button"));
-		noteSubmitButton.click();
-*/
-		//Thread.sleep(5000);
-		driver.get("http://localhost:" + this.port + "/home");
-		notesTab = driver.findElement(By.id("nav-notes-tab"));
-		notesTab.click();
-		Thread.sleep(100000);
+		navToNotes();
 	}
 
 	/**

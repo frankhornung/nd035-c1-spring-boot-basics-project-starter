@@ -25,6 +25,10 @@ public class NoteController {
 
         if (note.getNoteId() != null){
             System.out.println("noteId is: " + note.getNoteId().toString());
+            if(note.getUserId() == null){
+                User currentUser = userService.getUser(authentication.getName());
+                note.setUserId(currentUser.getUserId());
+            }
             noteService.updateNote(note);
         }
         else{
@@ -34,13 +38,14 @@ public class NoteController {
             note.setUserId(currentUser.getUserId());
             noteService.createNote(note);
         }
-        return "redirect:/home#nav-notes";
+        return "redirect:/home";
     }
 
     @RequestMapping("/notedelete")
     public String deleteNote(@RequestParam(value = "noteId", required = true) Integer noteId, Model model){
+        System.out.println("notedelete with noteId param " + noteId);
         noteService.deleteNoteById(noteId);
-        return "redirect:/home#nav-notes";
+        return "redirect:/home";
     }
 
 }

@@ -24,5 +24,5 @@ public interface NoteMapper {
     List<Note> getAllNotesForUid(Integer userId);
 
     @Update("UPDATE NOTES SET noteTitle = #{noteTitle}, noteDescription = #{noteDescription}, userId = #{userId} WHERE noteId = #{noteId}")
-    void updateNote(Note note);
+    int updateNote(Note note);
 }

@@ -34,7 +34,9 @@ public class NoteService {
     }
 
     public List<Note> getAllNotesForUid(Integer uid){
-        System.out.println("get all notes for uid called");
+        System.out.println("get all notes for uid " + uid + " called");
+        System.out.println("returning # elements: " + noteMapper.getAllNotesForUid(uid).size());
+        //noteMapper.getAllNotesForUid(uid).size();
         return noteMapper.getAllNotesForUid(uid);
     }
 
@@ -44,8 +46,9 @@ public class NoteService {
     }
 
     public void updateNote(Note note){
-        System.out.println("update note with id" + note.getNoteId().toString());
-        noteMapper.updateNote(note);
+        System.out.println("update note with id: " + note.getNoteId().toString());
+        Integer bla = noteMapper.updateNote(note);
+        System.out.println("ret is: " + bla);
     }
 
 }

@@ -85,11 +85,11 @@
                                     </tr>
                                     <tr th:each="note : ${allNotes}" th:id="${note.noteId}">
                                         <td>
-                                            <button th:data1="${note.noteTitle}" th:data2="${note.noteDescription}" type="button" class="btn btn-success" th:onclick="'showNoteModal('+ ${note.noteId} + ',' + 'this.getAttribute(\'data1\')' + ',' + 'this.getAttribute(\'data2\')' + ')'">Edit</button>
+                                            <button th:id="note-edit-+${note.noteId}" th:data1="${note.noteTitle}" th:data2="${note.noteDescription}" type="button" class="btn btn-success" th:onclick="'showNoteModal('+ ${note.noteId} + ',' + 'this.getAttribute(\'data1\')' + ',' + 'this.getAttribute(\'data2\')' + ')'">Edit</button>
                                             <a class="btn btn-danger" id="delete-button" th:href="@{/notedelete(noteId=${note.noteId})}">Delete</a>
                                         </td>
-                                        <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
-                                        <td th:text="${note.noteDescription}">Example Note Description </td>
+                                        <th scope="row" th:id="note-title-+${note.noteId}" th:text="${note.noteTitle}">Example Note Title</th>
+                                        <td th:id="note-description-+${note.noteId}" th:text="${note.noteDescription}">Example Note Description </td>
                                         <td th:text="${note.noteId}">note id </td>
                                     </tr>
                                 </tbody>
