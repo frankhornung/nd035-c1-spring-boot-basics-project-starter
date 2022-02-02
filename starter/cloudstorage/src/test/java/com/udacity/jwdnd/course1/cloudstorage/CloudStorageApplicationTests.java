@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
@@ -43,14 +44,7 @@ class CloudStorageApplicationTests {
 		}
 	}
 
-	@Test
-	public void getLoginPage() {
-		driver.get("http://localhost:" + this.port + "/login");
-		Assertions.assertEquals("Login", driver.getTitle());
-	}
-
-	@Test
-	public void verifyUnauthorizedAcessRestrictions(){
+	public void verifyUnauthorizedAccessRestrictions(){
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
 
@@ -64,23 +58,6 @@ class CloudStorageApplicationTests {
 		driver.get("http://localhost:" + this.port + "/home");
 		WebElement buttonSignUp = driver.findElement(By.id("logout-button"));
 		buttonSignUp.click();
-	}
-
-	@Test
-	public void signUpLoginLogout(){
-		String firstName = "Max";
-		String lastName = "Mustermann";
-		String userName = "mamu";
-		String password = "mamu";
-
-		doMockSignUp(firstName,lastName,userName,password);
-
-		doLogIn(userName, password);
-		Assertions.assertEquals("Home", driver.getTitle());
-
-		doLogout();
-
-		verifyUnauthorizedAcessRestrictions();
 	}
 
 	public void navToNotes(){
@@ -125,8 +102,34 @@ class CloudStorageApplicationTests {
 		// enter the new note and submit
 		submitNote(title,description);
 	}
+	
+	@Test
+	@Order(1)
+	public void getLoginPage() {
+		driver.get("http://localhost:" + this.port + "/login");
+		Assertions.assertEquals("Login", driver.getTitle());
+	}
 
 	@Test
+	@Order(2)
+	public void signUpLoginLogout(){
+		String firstName = "Max";
+		String lastName = "Mustermann";
+		String userName = "mamu";
+		String password = "mamu";
+
+		doMockSignUp(firstName,lastName,userName,password);
+
+		doLogIn(userName, password);
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		doLogout();
+
+		verifyUnauthorizedAccessRestrictions();
+	}
+
+	@Test
+	@Order(3)
 	public void addNoteWithVerification() throws InterruptedException{
 		String firstName = "Note";
 		String lastName = "Nerd";
@@ -148,41 +151,19 @@ class CloudStorageApplicationTests {
 		WebElement firstNoteDesc = driver.findElement(By.id("note-description-1"));
 		Assertions.assertEquals(title,firstNoteTitle.getText());
 		Assertions.assertEquals(description,firstNoteDesc.getText());
-
+		doLogout();
 		//Thread.sleep(100000);
 	}
-	@Test
-	public void deleteNoteWithVerification() throws InterruptedException {
-
-		try {
-			addNoteWithVerification();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		driver.get("http://localhost:" + this.port + "/home");
-		navToNotes();
-
-		Boolean isPresent =  driver.findElements(By.id("note-title-1")).size() > 0;
-		Assertions.assertTrue(driver.findElements(By.id("note-title-1")).size() > 0);
-		driver.get("http://localhost:" + this.port + "/notedelete?noteId=1");
-		driver.get("http://localhost:" + this.port + "/home");
-		navToNotes();
-		Assertions.assertFalse(driver.findElements(By.id("note-title-1")).size() > 0);
-
-	}
 
 	@Test
+	@Order(4)
 	public void editNoteWithVerification(){
 		String title = "Title";
 		String changedTitle = "changed Title";
 		String description = "Description";
 		String changedDescription = "changed Description";
 
-		try {
-			addNoteWithVerification();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		doLogIn("none", "none");
 		driver.get("http://localhost:" + this.port + "/home");
 		navToNotes();
 
@@ -210,17 +191,26 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals(changedDescription,changedNoteDesc.getText());
 
 	}
+	@Test
+	@Order(5)
+	public void deleteNoteWithVerification() throws InterruptedException {
+
+		doLogIn("none", "none");
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+
+		Assertions.assertTrue(driver.findElements(By.id("note-title-1")).size() > 0);
+		driver.get("http://localhost:" + this.port + "/notedelete?noteId=1");
+		driver.get("http://localhost:" + this.port + "/home");
+		navToNotes();
+		Assertions.assertFalse(driver.findElements(By.id("note-title-1")).size() > 0);
+	}
 
 	@Test
+	@Order(6)
 	public void addFiveNotes() throws InterruptedException {
-		String firstName = "Note";
-		String lastName = "Nerd";
-		String userName = "none";
-		String password = "none";
 
-		doMockSignUp(firstName,lastName,userName,password);
-
-		doLogIn(userName, password);
+		doLogIn("none", "none");
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		List<String> iterationMessage = Arrays.asList("FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH");
