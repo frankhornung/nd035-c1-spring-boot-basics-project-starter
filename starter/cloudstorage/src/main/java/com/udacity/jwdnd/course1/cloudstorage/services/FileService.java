@@ -23,4 +23,14 @@ public class FileService {
     public List<File> getAllFilesForUid(Integer uid){
         return fileMapper.getAllFilesForUid(uid);
     }
+    public Boolean filenameFree(String filename, Integer uid){
+        System.out.println("FileService isFilenameOfUserUnique called");
+        Integer count = fileMapper.getCountOfFile(filename,uid);
+        if(count == 0){
+            return Boolean.TRUE;
+        }
+        else{
+            return Boolean.FALSE;
+        }
+    }
 }

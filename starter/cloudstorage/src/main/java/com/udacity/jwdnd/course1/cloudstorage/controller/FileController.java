@@ -37,9 +37,14 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (fileService.filenameFree(fileUpload.getOriginalFilename(), currentUser.getUserId())){
+            fileService.addFile(file);
+            model.addAttribute("success", "Success");
+        }
+        else{
+            model.addAttribute("failed", "File does already exist, you cannot upload it again");
+        }
 
-        fileService.addFile(file);
-        model.addAttribute("success", "Success");
         return "result";
     }
 
