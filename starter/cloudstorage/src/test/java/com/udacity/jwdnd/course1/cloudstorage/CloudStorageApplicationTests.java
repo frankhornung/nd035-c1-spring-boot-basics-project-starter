@@ -380,6 +380,34 @@ class CloudStorageApplicationTests {
 
 	}
 
+	@Test
+	public void fileTestSuite() throws InterruptedException {
+		testLargeUpload();
+
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+
+		// verify success message
+		Assertions.assertTrue(driver.findElements(By.id("success-link")).size() > 0);
+		WebElement successLink = driver.findElement(By.id("success-link"));
+		successLink.click();
+
+		//verify testfile is in filelist
+		Assertions.assertTrue(driver.findElements(By.id("file-1")).size() > 0);
+
+		// try to add same file again -> expected to fail
+		String fileName = "upload5m.zip";
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("fileUpload")));
+		WebElement fileSelectButton = driver.findElement(By.id("fileUpload"));
+		fileSelectButton.sendKeys(new File(fileName).getAbsolutePath());
+		WebElement uploadButton = driver.findElement(By.id("uploadButton"));
+		uploadButton.click();
+		// verify error message
+		Assertions.assertTrue(driver.findElements(By.id("error-link")).size() > 0);
+		WebElement errorLink = driver.findElement(By.id("error-link"));
+		errorLink.click();
+
+		Thread.sleep(50000);
+	}
 
 
 }

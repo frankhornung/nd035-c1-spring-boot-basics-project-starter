@@ -33,4 +33,10 @@ public class FileService {
             return Boolean.FALSE;
         }
     }
+
+    public void deleteFileById(Integer fileId){
+        System.out.println("delete file with id" + fileId.toString());
+        fileMapper.deleteFileById(fileId);
+    }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,15 +38,28 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (fileService.filenameFree(fileUpload.getOriginalFilename(), currentUser.getUserId())){
-            fileService.addFile(file);
-            model.addAttribute("success", "Success");
+
+        System.out.println("DBG filename:" + file.getFilename());
+        if(!file.getFilename().isEmpty() && file.getFilename() != null){
+            if (fileService.filenameFree(fileUpload.getOriginalFilename(), currentUser.getUserId())){
+                fileService.addFile(file);
+                model.addAttribute("success", "Success");
+            }
+            else{
+                model.addAttribute("failed", "File does already exist, you cannot upload it again");
+            }
         }
         else{
-            model.addAttribute("failed", "File does already exist, you cannot upload it again");
+            model.addAttribute("failed", "Filename is empty");
         }
-
         return "result";
+    }
+
+    @RequestMapping("/filedelete")
+    public String deleteFile(@RequestParam(value = "fileId", required = true) Integer fileId, Model model){
+        System.out.println("filedelete with fileId param " + fileId);
+        fileService.deleteFileById(fileId);
+        return "redirect:/home";
     }
 
 }

@@ -17,12 +17,12 @@ public interface FileMapper {
 
     @Select("SELECT COUNT(*) FROM FILES where userId = #{uid} and filename = #{filename}")
     int getCountOfFile(String filename,Integer uid);
+
+    @Delete("DELETE FROM FILES WHERE fileId = #{fileid}")
+    void deleteFileById(Integer fileId);
 /*
     @Select("SELECT * FROM NOTES WHERE noteId = #{noteid}")
     Note getNoteById(Integer noteId);
-
-    @Delete("DELETE FROM NOTES WHERE noteId = #{noteid}")
-    void deleteNoteById(Integer noteId);
 
     @Insert("INSERT INTO NOTES (noteId, noteTitle, noteDescription, userId) VALUES(#{noteId}, #{noteTitle}, #{noteDescription}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "noteId")
