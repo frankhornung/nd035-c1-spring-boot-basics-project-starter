@@ -28,6 +28,7 @@ public class FileController {
     @PostMapping("/file-upload")
     public String handleFileUpload(@RequestParam("fileUpload") MultipartFile fileUpload, Model model, Authentication authentication){
 
+        System.out.println("/file-upload Post mapping called");
         User currentUser = userService.getUser(authentication.getName());
 
         File file = null;

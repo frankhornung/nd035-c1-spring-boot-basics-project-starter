@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
@@ -19,10 +20,12 @@ public class HomeController {
 
     private final NoteService noteService;
     private final UserService userService;
+    private final FileService fileService;
 
-    public HomeController(NoteService noteService, UserService userService) {
+    public HomeController(NoteService noteService, UserService userService, FileService fileService) {
         this.noteService = noteService;
         this.userService = userService;
+        this.fileService = fileService;
     }
 
     @GetMapping("/home")
@@ -31,6 +34,7 @@ public class HomeController {
         User currentUser = userService.getUser(authentication.getName());
         Integer uid = currentUser.getUserId();
         model.addAttribute("allNotes", noteService.getAllNotesForUid(uid));
+        model.addAttribute("allFiles",fileService.getAllFilesForUid(uid));
         return "home";
     }
 
