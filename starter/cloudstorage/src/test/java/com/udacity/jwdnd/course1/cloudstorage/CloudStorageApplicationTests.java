@@ -44,15 +44,7 @@ class CloudStorageApplicationTests {
 		}
 	}
 
-	public void verifyUnauthorizedAccessRestrictions(){
-		driver.get("http://localhost:" + this.port + "/home");
-		Assertions.assertEquals("Login", driver.getTitle());
 
-		driver.get("http://localhost:" + this.port + "/signup");
-		Assertions.assertEquals("Sign Up", driver.getTitle());
-
-		getLoginPage();
-	}
 
 	public void doLogout(){
 		driver.get("http://localhost:" + this.port + "/home");
@@ -102,7 +94,7 @@ class CloudStorageApplicationTests {
 		// enter the new note and submit
 		submitNote(title,description);
 	}
-	
+
 	@Test
 	@Order(1)
 	public void getLoginPage() {
@@ -112,6 +104,18 @@ class CloudStorageApplicationTests {
 
 	@Test
 	@Order(2)
+	public void verifyUnauthorizedAccessRestrictions(){
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/signup");
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+
+		getLoginPage();
+	}
+
+	@Test
+	@Order(3)
 	public void signUpLoginLogout(){
 		String firstName = "Max";
 		String lastName = "Mustermann";
@@ -129,7 +133,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(3)
+	@Order(4)
 	public void addNoteWithVerification() throws InterruptedException{
 		String firstName = "Note";
 		String lastName = "Nerd";
@@ -156,7 +160,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(4)
+	@Order(5)
 	public void editNoteWithVerification(){
 		String title = "Title";
 		String changedTitle = "changed Title";
@@ -192,7 +196,7 @@ class CloudStorageApplicationTests {
 
 	}
 	@Test
-	@Order(5)
+	@Order(6)
 	public void deleteNoteWithVerification() throws InterruptedException {
 
 		doLogIn("none", "none");
@@ -207,7 +211,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(6)
+	@Order(7)
 	public void addFiveNotes() throws InterruptedException {
 
 		doLogIn("none", "none");
