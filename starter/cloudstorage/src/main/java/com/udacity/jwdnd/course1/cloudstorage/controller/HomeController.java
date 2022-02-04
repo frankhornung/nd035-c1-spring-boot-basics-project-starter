@@ -40,6 +40,8 @@ public class HomeController {
         model.addAttribute("allNotes", noteService.getAllNotesForUid(uid));
         model.addAttribute("allFiles",fileService.getAllFilesForUid(uid));
         model.addAttribute("allCredentials", credentialService.getAllCredentialsForUid(uid));
+        model.addAttribute("credentialService", this.credentialService);
+
         return "home";
     }
 

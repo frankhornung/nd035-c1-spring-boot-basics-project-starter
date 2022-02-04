@@ -45,6 +45,21 @@ public class CredentialService {
         return credentialMapper.getAllCredentialsForUid(uid);
     }
 
+    public void updateCredential(Credential credential){
+        System.out.println("update credential with id: " + credential.getCredentialId().toString());
+
+        // ensure updated password is encrypted
+        String encodedKey = credentialMapper.getKey(credential.getCredentialId());
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
+        credential.setPassword(encryptedPassword);
+
+        Integer ret = credentialMapper.updateCredential(credential);
+        System.out.println("ret is: " + ret);
+    }
+
+    public String decryptPw(Credential credential){
+        return encryptionService.decryptValue(credential.getPassword(), credentialMapper.getKey(credential.getCredentialId()));
+    }
     /*
 
     public void deleteNoteById(Integer noteId){
@@ -52,10 +67,5 @@ public class CredentialService {
         noteMapper.deleteNoteById(noteId);
     }
 
-    public void updateNote(Note note){
-        System.out.println("update note with id: " + note.getNoteId().toString());
-        Integer bla = noteMapper.updateNote(note);
-        System.out.println("ret is: " + bla);
-    }
 */
 }
