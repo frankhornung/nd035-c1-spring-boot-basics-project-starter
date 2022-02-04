@@ -20,10 +20,11 @@ public interface FileMapper {
 
     @Delete("DELETE FROM FILES WHERE fileId = #{fileid}")
     void deleteFileById(Integer fileId);
-/*
-    @Select("SELECT * FROM NOTES WHERE noteId = #{noteid}")
-    Note getNoteById(Integer noteId);
 
+    @Select("SELECT * FROM FILES WHERE fileId = #{fileId} AND userId = #{userId}")
+    File getFileById(Integer fileId, Integer userId);
+
+/*
     @Insert("INSERT INTO NOTES (noteId, noteTitle, noteDescription, userId) VALUES(#{noteId}, #{noteTitle}, #{noteDescription}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "noteId")
     int insert(Note note);

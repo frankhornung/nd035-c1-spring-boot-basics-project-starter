@@ -34,9 +34,15 @@ public class FileService {
         }
     }
 
+    // TODO add userid
     public void deleteFileById(Integer fileId){
         System.out.println("delete file with id" + fileId.toString());
         fileMapper.deleteFileById(fileId);
+    }
+
+    public File getFileById(Integer fileId, Integer userId){
+        System.out.println("get file with id: " + fileId.toString() + " for userId: " + userId);
+        return fileMapper.getFileById(fileId,userId);
     }
 
 }
