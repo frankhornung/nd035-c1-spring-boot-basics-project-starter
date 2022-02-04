@@ -60,12 +60,10 @@ public class CredentialService {
     public String decryptPw(Credential credential){
         return encryptionService.decryptValue(credential.getPassword(), credentialMapper.getKey(credential.getCredentialId()));
     }
-    /*
 
-    public void deleteNoteById(Integer noteId){
-        System.out.println("delete note with id" + noteId.toString());
-        noteMapper.deleteNoteById(noteId);
+    public void deleteCredentialById(Integer credentialId, Integer userId){
+        System.out.println("delete note with id" + credentialId.toString());
+        credentialMapper.deleteCredentialById(credentialId, userId);
     }
 
-*/
 }

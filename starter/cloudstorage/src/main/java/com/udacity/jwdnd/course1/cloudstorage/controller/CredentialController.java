@@ -47,9 +47,16 @@ public class CredentialController {
         else{
             System.out.println("credentialId is NULL");
             credential.setUserId(currentUser.getUserId());
-            //credential.printall();
             credentialService.createCredential(credential);
         }
+        return "redirect:/home";
+    }
+
+    @RequestMapping("/credentialdelete")
+    public String deleteCredential(@RequestParam(value = "credentialId", required = true) Integer credentialId, Authentication authentication){
+        User currentUser = userService.getUser(authentication.getName());
+        System.out.println("credentialdelete with noteId param " + credentialId);
+        credentialService.deleteCredentialById(credentialId, currentUser.getUserId());
         return "redirect:/home";
     }
 

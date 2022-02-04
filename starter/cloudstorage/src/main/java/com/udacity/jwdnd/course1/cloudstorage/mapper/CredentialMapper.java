@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.mapper;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -16,10 +15,6 @@ public interface CredentialMapper {
     @Select("SELECT * FROM CREDENTIALS WHERE userId = #{uid}")
     List<Credential> getAllCredentialsForUid(Integer uid);
 
-    /*
-    @Select("SELECT COUNT(*) FROM CREDENTIALS where userId = #{uid} and filename = #{filename}")
-    int getCountOfCredential(String filename,Integer uid);
-*/
     @Delete("DELETE FROM CREDENTIALS WHERE credentialId = #{credentialId} AND userId = #{userId}")
     void deleteCredentialById(Integer credentialId, Integer userId);
 
