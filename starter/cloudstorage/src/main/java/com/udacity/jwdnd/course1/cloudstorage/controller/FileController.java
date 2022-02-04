@@ -60,9 +60,13 @@ public class FileController {
     }
 
     @RequestMapping("/filedelete")
-    public String deleteFile(@RequestParam(value = "fileId", required = true) Integer fileId, Model model){
+    public String deleteFile(@RequestParam(value = "fileId", required = true) Integer fileId, Model model, Authentication authentication){
         System.out.println("filedelete with fileId param " + fileId);
-        fileService.deleteFileById(fileId);
+
+        User currentUser = userService.getUser(authentication.getName());
+        File file = fileService.getFileById(fileId, currentUser.getUserId());
+
+        fileService.deleteFileById(fileId, currentUser.getUserId());
         return "redirect:/home";
     }
 

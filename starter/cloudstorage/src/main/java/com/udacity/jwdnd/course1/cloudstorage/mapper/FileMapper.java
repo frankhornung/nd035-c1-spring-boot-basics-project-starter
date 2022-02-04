@@ -18,8 +18,8 @@ public interface FileMapper {
     @Select("SELECT COUNT(*) FROM FILES where userId = #{uid} and filename = #{filename}")
     int getCountOfFile(String filename,Integer uid);
 
-    @Delete("DELETE FROM FILES WHERE fileId = #{fileid}")
-    void deleteFileById(Integer fileId);
+    @Delete("DELETE FROM FILES WHERE fileId = #{fileId} AND userId = #{userId}")
+    void deleteFileById(Integer fileId, Integer userId);
 
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId} AND userId = #{userId}")
     File getFileById(Integer fileId, Integer userId);
