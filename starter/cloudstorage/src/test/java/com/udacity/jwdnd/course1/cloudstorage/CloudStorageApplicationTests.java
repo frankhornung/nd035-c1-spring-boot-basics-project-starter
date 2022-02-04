@@ -406,7 +406,7 @@ class CloudStorageApplicationTests {
 		WebElement errorLink = driver.findElement(By.id("error-link"));
 		errorLink.click();
 
-		Thread.sleep(5000);
+		Thread.sleep(500000);
 	}
 
 
