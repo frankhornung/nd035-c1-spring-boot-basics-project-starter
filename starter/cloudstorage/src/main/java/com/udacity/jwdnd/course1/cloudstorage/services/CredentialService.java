@@ -39,6 +39,7 @@ public class CredentialService {
         return credentialMapper.insert(credential);
     }
 
+
     public List<Credential> getAllCredentialsForUid(Integer uid){
         System.out.println("get all credentials for uid " + uid + " called");
         System.out.println("returning # elements: " + credentialMapper.getAllCredentialsForUid(uid).size());

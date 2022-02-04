@@ -1,5 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -13,6 +17,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.io.File;
 import java.util.Arrays;
@@ -58,6 +64,12 @@ class CloudStorageApplicationTests {
 		notesTab.click();
 	}
 
+	public void navToCredentials(){
+		driver.get("http://localhost:" + this.port + "/home");
+		WebElement credentialsTab = driver.findElement(By.id("nav-credentials-tab"));
+		credentialsTab.click();
+	}
+
 	public void submitNote(String title, String description){
 		WebElement noteTitleInput = driver.findElement(By.id("note-title"));
 		WebElement noteDescriptionInput = driver.findElement(By.id("note-description"));
@@ -71,6 +83,27 @@ class CloudStorageApplicationTests {
 		noteSubmitButton.click();
 	}
 
+	public void submitCredential(String url, String username, String password){
+		WebElement credentialUrlInput = driver.findElement(By.id("credential-url"));
+		WebElement credentialUsernameInput = driver.findElement(By.id("credential-username"));
+		WebElement credentialPasswordInput = driver.findElement(By.id("credential-password"));
+
+		credentialUrlInput.click();
+		credentialUrlInput.clear();
+		credentialUrlInput.sendKeys(url);
+
+		credentialUsernameInput.click();
+		credentialUsernameInput.clear();
+		credentialUsernameInput.sendKeys(username);
+
+		credentialPasswordInput.click();
+		credentialPasswordInput.clear();
+		credentialPasswordInput.sendKeys(password);
+
+		WebElement credentialSubmitButton = driver.findElement(By.id("save-new-credential-button"));
+		credentialSubmitButton.click();
+	}
+
 	public void addNote(String title, String description){
 		// open notes-tab
 		navToNotes();
@@ -81,6 +114,18 @@ class CloudStorageApplicationTests {
 
 		// enter the new note and submit
 		submitNote(title,description);
+	}
+
+	public void addCredential(String url, String username, String password){
+		// open notes-tab
+		navToCredentials();
+
+		// locate the add-note button
+		WebElement addCredentialButton = driver.findElement(By.id("add-credential-button"));
+		addCredentialButton.click();
+
+		// enter the new note and submit
+		submitCredential(url,username, password);
 	}
 
 	public void editNote(Integer noteId, String title, String description){
@@ -222,6 +267,37 @@ class CloudStorageApplicationTests {
 			addNote(noteText,noteText);
 		}
 		navToNotes();
+	}
+
+	@Test
+	public void credentialsWorkflow() throws InterruptedException{
+		String firstName = "Bob";
+		String lastName = "Uncle";
+		String userName = "bobun";
+		String password = "gandalf";
+
+		String url = "www.google.de";
+		String websiteUsername = "fabulousBob";
+		String websitePassword = "catsAndDogs";
+
+		doMockSignUp(firstName,lastName,userName,password);
+		doLogIn(userName, password);
+		Assertions.assertEquals("Home", driver.getTitle());
+		addCredential(url, websiteUsername, websitePassword);
+
+		driver.get("http://localhost:" + this.port + "/home");
+		navToCredentials();
+		Thread.sleep(3000);
+		WebElement firstCredUrl = driver.findElement(By.id("credential-url-1"));
+		WebElement firstCredUsername = driver.findElement(By.id("credential-username-1"));
+		WebElement firstCredPassword = driver.findElement(By.id("credential-password-1"));
+		Assertions.assertEquals(url,firstCredUrl.getText());
+		Assertions.assertEquals(websiteUsername,firstCredUsername.getText());
+		Assertions.assertNotEquals(websitePassword,firstCredPassword.getText());
+		doLogout();
+
+
+		//Thread.sleep(100000);
 	}
 
 	/**
@@ -406,7 +482,7 @@ class CloudStorageApplicationTests {
 		WebElement errorLink = driver.findElement(By.id("error-link"));
 		errorLink.click();
 
-		Thread.sleep(500000);
+		//Thread.sleep(500000);
 	}
 
 
