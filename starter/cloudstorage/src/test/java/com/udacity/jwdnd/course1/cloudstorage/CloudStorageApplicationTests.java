@@ -128,11 +128,23 @@ class CloudStorageApplicationTests {
 		submitCredential(url,username, password);
 	}
 
+	public void editCredential(Integer credentialId, String url, String username, String newPassword){
+		// open notes-tab
+		navToCredentials();
+
+		// locate the add-note button
+		WebElement editCredentialButton = driver.findElement(By.id("credential-edit-" + credentialId ));
+		editCredentialButton.click();
+
+		// enter the new note and submit
+		submitCredential(url, username, newPassword);
+	}
+
 	public void editNote(Integer noteId, String title, String description){
 		// open notes-tab
 		navToNotes();
 
-		// locate the add-note button
+		// locate the edit credential button
 		WebElement editNoteButton = driver.findElement(By.id("note-edit-" + noteId.toString()));
 		editNoteButton.click();
 
@@ -280,22 +292,62 @@ class CloudStorageApplicationTests {
 		String websiteUsername = "fabulousBob";
 		String websitePassword = "catsAndDogs";
 
+		String changedUrl = "www.facebook.com";
+		String changedWebsiteUsername = "hirschhausen";
+		String changedWebsitePassword = "dogsAndCats";
+
+		// sign up test-user
 		doMockSignUp(firstName,lastName,userName,password);
 		doLogIn(userName, password);
 		Assertions.assertEquals("Home", driver.getTitle());
+
+		// add first credential
 		addCredential(url, websiteUsername, websitePassword);
 
+		// verify credential was created and verify
 		driver.get("http://localhost:" + this.port + "/home");
 		navToCredentials();
-		Thread.sleep(3000);
+		//Thread.sleep(3000);
 		WebElement firstCredUrl = driver.findElement(By.id("credential-url-1"));
 		WebElement firstCredUsername = driver.findElement(By.id("credential-username-1"));
 		WebElement firstCredPassword = driver.findElement(By.id("credential-password-1"));
+
+		// check values - especially password is not plaintext
 		Assertions.assertEquals(url,firstCredUrl.getText());
 		Assertions.assertEquals(websiteUsername,firstCredUsername.getText());
 		Assertions.assertNotEquals(websitePassword,firstCredPassword.getText());
-		doLogout();
+		String firstHash = firstCredPassword.getText();
 
+		// check that password is unencrypted in modal
+		WebElement editNoteButton = driver.findElement(By.id("credential-edit-1"));
+		System.out.println(editNoteButton.getAttribute("data3"));
+		Assertions.assertEquals(editNoteButton.getAttribute("data3"),websitePassword);
+
+		editCredential(1,changedUrl,changedWebsiteUsername,changedWebsitePassword);
+
+		// verify credential was edited and verify
+		driver.get("http://localhost:" + this.port + "/home");
+		navToCredentials();
+		WebElement firstChangedCredUrl = driver.findElement(By.id("credential-url-1"));
+		WebElement firstChangedCredUsername = driver.findElement(By.id("credential-username-1"));
+		WebElement firstChangedCredPassword = driver.findElement(By.id("credential-password-1"));
+
+		// check values - especially password is not plaintext
+		Assertions.assertEquals(changedUrl,firstChangedCredUrl.getText());
+		Assertions.assertEquals(changedWebsiteUsername,firstChangedCredUsername.getText());
+		Assertions.assertNotEquals(changedWebsitePassword,firstChangedCredPassword.getText());
+		Assertions.assertNotEquals(firstHash,firstChangedCredPassword.getText());
+
+		driver.get("http://localhost:" + this.port + "/home");
+		navToCredentials();
+
+		Assertions.assertTrue(driver.findElements(By.id("credential-url-1")).size() > 0);
+		driver.get("http://localhost:" + this.port + "/credentialdelete?credentialId=1");
+		driver.get("http://localhost:" + this.port + "/home");
+		navToCredentials();
+		Assertions.assertFalse(driver.findElements(By.id("credential-url-1")).size() > 0);
+
+		doLogout();
 
 		//Thread.sleep(100000);
 	}
@@ -432,6 +484,7 @@ class CloudStorageApplicationTests {
 	 * https://spring.io/guides/gs/uploading-files/ under the "Tuning File Upload Limits" section.
 	 */
 	@Test
+	@Order(8)
 	public void testLargeUpload() {
 		// Create a test account
 		doMockSignUp("Large File","Test","LFT","123");
@@ -453,30 +506,58 @@ class CloudStorageApplicationTests {
 			System.out.println("Large File upload failed");
 		}
 		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
+	}
+
+	public void testUpload() {
+		// Create a test account
+		doMockSignUp("Fileupload","Tester","ftest","1234");
+		doLogIn("ftest", "1234");
+
+		// Try to upload an arbitrary large file
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		String fileName = "upload5m.zip";
+
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("fileUpload")));
+		WebElement fileSelectButton = driver.findElement(By.id("fileUpload"));
+		fileSelectButton.sendKeys(new File(fileName).getAbsolutePath());
+
+		WebElement uploadButton = driver.findElement(By.id("uploadButton"));
+		uploadButton.click();
+		try {
+			webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("success")));
+		} catch (org.openqa.selenium.TimeoutException e) {
+			System.out.println("Large File upload failed");
+		}
+		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
 
 	}
 
 	@Test
+	@Order(9)
 	public void fileTestSuite() throws InterruptedException {
-		testLargeUpload();
-
+		testUpload();
+		//Thread.sleep(2000);
 		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
 
 		// verify success message
 		Assertions.assertTrue(driver.findElements(By.id("success-link")).size() > 0);
 		WebElement successLink = driver.findElement(By.id("success-link"));
+		//Thread.sleep(2000);
 		successLink.click();
+		//Thread.sleep(2000);
 
 		//verify testfile is in filelist
-		Assertions.assertTrue(driver.findElements(By.id("file-1")).size() > 0);
-
+		Assertions.assertTrue(driver.findElements(By.id("file-2")).size() > 0);
+		//Thread.sleep(2000);
 		// try to add same file again -> expected to fail
 		String fileName = "upload5m.zip";
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("fileUpload")));
 		WebElement fileSelectButton = driver.findElement(By.id("fileUpload"));
 		fileSelectButton.sendKeys(new File(fileName).getAbsolutePath());
 		WebElement uploadButton = driver.findElement(By.id("uploadButton"));
+		//Thread.sleep(2000);
 		uploadButton.click();
+		Thread.sleep(2000);
 		// verify error message
 		Assertions.assertTrue(driver.findElements(By.id("error-link")).size() > 0);
 		WebElement errorLink = driver.findElement(By.id("error-link"));
