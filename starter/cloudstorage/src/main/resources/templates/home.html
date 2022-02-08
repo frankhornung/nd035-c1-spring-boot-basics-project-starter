@@ -75,14 +75,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
-                                        </td>
-                                        <th scope="row">Example Note Title</th>
-                                        <td>Example Note Description </td>
-                                    </tr>
                                     <tr th:each="note : ${allNotes}" th:id="${note.noteId}">
                                         <td>
                                             <button th:id="note-edit-+${note.noteId}" th:data1="${note.noteTitle}" th:data2="${note.noteDescription}" type="button" class="btn btn-success" th:onclick="'showNoteModal('+ ${note.noteId} + ',' + 'this.getAttribute(\'data1\')' + ',' + 'this.getAttribute(\'data2\')' + ')'">Edit</button>

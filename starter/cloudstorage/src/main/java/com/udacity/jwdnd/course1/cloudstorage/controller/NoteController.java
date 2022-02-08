@@ -21,7 +21,7 @@ public class NoteController {
     }
 
     @PostMapping("/notesubmit")
-    public String submitNote(@ModelAttribute("noteObject") Note note, Authentication authentication) {
+    public String submitNote(@ModelAttribute("noteObject") Note note, Authentication authentication, Model model) {
 
         if (note.getNoteId() != null){
             System.out.println("noteId is: " + note.getNoteId().toString());
@@ -38,11 +38,13 @@ public class NoteController {
             note.setUserId(currentUser.getUserId());
             noteService.createNote(note);
         }
-        return "redirect:/home";
+        //return "redirect:/home";
+        model.addAttribute("success", "Success");
+        return "result";
     }
 
     @RequestMapping("/notedelete")
-    public String deleteNote(@RequestParam(value = "noteId", required = true) Integer noteId, Model model){
+    public String deleteNote(@RequestParam(value = "noteId", required = true) Integer noteId){
         System.out.println("notedelete with noteId param " + noteId);
         noteService.deleteNoteById(noteId);
         return "redirect:/home";
