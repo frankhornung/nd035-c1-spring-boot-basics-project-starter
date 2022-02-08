@@ -15,7 +15,7 @@
                 <div id="error-msg" th:if="${param.error}" class="alert alert-danger">
                     Invalid username or password
                 </div>
-                <div id="logout-msg" th:if="${param.logout}" class="alert alert-dark">
+                <div id="logout-msg" th:if="${logoutSuccess}" class="alert alert-dark">
                     You have been logged out
                 </div>
                 <div id="success-msg" th:if="${signupSuccess}" class="alert alert-dark">

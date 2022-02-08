@@ -19,11 +19,20 @@ public class LoginController {
         // https://www.baeldung.com/spring-web-flash-attributes
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {
-            Boolean success = (Boolean) inputFlashMap.get("signupSuccess");
-            if(success){
-                model.addAttribute("signupSuccess", true);
+            if(inputFlashMap.containsKey("signupSuccess")) {
+                Boolean signupSuccess = (Boolean) inputFlashMap.get("signupSuccess");
+                if (signupSuccess) {
+                    model.addAttribute("signupSuccess", true);
+                }
+            }
+            if(inputFlashMap.containsKey("logoutSuccess")){
+                Boolean logoutSuccess = (Boolean) inputFlashMap.get("logoutSuccess");
+                if(logoutSuccess){
+                    model.addAttribute("logoutSuccess", true);
+                }
             }
         }
+
         return "login";
     }
 }
