@@ -267,8 +267,6 @@ class CloudStorageApplicationTests {
 		Assertions.assertFalse(driver.findElements(By.id("note-title-1")).size() > 0);
 	}
 
-	@Test
-	@Order(7)
 	public void addFiveNotes() throws InterruptedException {
 
 		doLogIn("none", "none");
