@@ -33,7 +33,7 @@ public class CredentialController {
     }
 
     @PostMapping("/credentialsubmit")
-    public String submitCredential(@ModelAttribute("credentialObject") Credential credential, Authentication authentication) {
+    public String submitCredential(@ModelAttribute("credentialObject") Credential credential, Authentication authentication, Model model) {
 
         User currentUser = userService.getUser(authentication.getName());
 
@@ -49,15 +49,19 @@ public class CredentialController {
             credential.setUserId(currentUser.getUserId());
             credentialService.createCredential(credential);
         }
-        return "redirect:/home";
+//        return "redirect:/home";
+        model.addAttribute("success", "Success");
+        return "result";
     }
 
     @RequestMapping("/credentialdelete")
-    public String deleteCredential(@RequestParam(value = "credentialId", required = true) Integer credentialId, Authentication authentication){
+    public String deleteCredential(@RequestParam(value = "credentialId", required = true) Integer credentialId, Authentication authentication, Model model){
         User currentUser = userService.getUser(authentication.getName());
         System.out.println("credentialdelete with noteId param " + credentialId);
         credentialService.deleteCredentialById(credentialId, currentUser.getUserId());
-        return "redirect:/home";
+        //return "redirect:/home";
+        model.addAttribute("success", "Success");
+        return "result";
     }
 
 }

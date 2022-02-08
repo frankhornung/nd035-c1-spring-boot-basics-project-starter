@@ -44,10 +44,12 @@ public class NoteController {
     }
 
     @RequestMapping("/notedelete")
-    public String deleteNote(@RequestParam(value = "noteId", required = true) Integer noteId){
+    public String deleteNote(@RequestParam(value = "noteId", required = true) Integer noteId, Model model){
         System.out.println("notedelete with noteId param " + noteId);
         noteService.deleteNoteById(noteId);
-        return "redirect:/home";
+        //return "redirect:/home";
+        model.addAttribute("success", "Success");
+        return "result";
     }
 
 }

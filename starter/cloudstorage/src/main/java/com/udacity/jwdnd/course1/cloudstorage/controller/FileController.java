@@ -67,7 +67,9 @@ public class FileController {
         File file = fileService.getFileById(fileId, currentUser.getUserId());
 
         fileService.deleteFileById(fileId, currentUser.getUserId());
-        return "redirect:/home";
+        //return "redirect:/home";
+        model.addAttribute("success", "Success");
+        return "result";
     }
 
     @GetMapping("/download")
