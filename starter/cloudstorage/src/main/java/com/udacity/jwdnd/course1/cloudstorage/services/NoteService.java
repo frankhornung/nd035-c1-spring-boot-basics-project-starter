@@ -5,8 +5,6 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -17,26 +15,16 @@ public class NoteService {
     public NoteService(NoteMapper noteMapper) {
         this.noteMapper = noteMapper;
     }
-/*
-    public boolean isUsernameAvailable(String username) {
-        return userMapper.getUser(username) == null;
-    }
-*/
+
     public int createNote(Note note) {
         // returns the id of created node as received from noteMapper
         System.out.println("NoteService createNote called");
         return noteMapper.insert(note);
     }
 
-    public List<Note> getAllNotes(){
-        System.out.println("get all notes called");
-        return noteMapper.getAllNotes();
-    }
-
     public List<Note> getAllNotesForUid(Integer uid){
         System.out.println("get all notes for uid " + uid + " called");
         System.out.println("returning # elements: " + noteMapper.getAllNotesForUid(uid).size());
-        //noteMapper.getAllNotesForUid(uid).size();
         return noteMapper.getAllNotesForUid(uid);
     }
 

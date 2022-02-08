@@ -29,16 +29,18 @@ public class NoteController {
                 User currentUser = userService.getUser(authentication.getName());
                 note.setUserId(currentUser.getUserId());
             }
+
             noteService.updateNote(note);
         }
         else{
             System.out.println("noteId is NULL");
-            // retrieve the userId from the Database
+
             User currentUser = userService.getUser(authentication.getName());
             note.setUserId(currentUser.getUserId());
+
             noteService.createNote(note);
         }
-        //return "redirect:/home";
+
         model.addAttribute("success", "Success");
         return "result";
     }
@@ -46,8 +48,9 @@ public class NoteController {
     @RequestMapping("/notedelete")
     public String deleteNote(@RequestParam(value = "noteId", required = true) Integer noteId, Model model){
         System.out.println("notedelete with noteId param " + noteId);
+
         noteService.deleteNoteById(noteId);
-        //return "redirect:/home";
+
         model.addAttribute("success", "Success");
         return "result";
     }

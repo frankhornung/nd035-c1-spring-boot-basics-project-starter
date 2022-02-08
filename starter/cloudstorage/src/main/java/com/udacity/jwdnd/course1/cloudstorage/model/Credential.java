@@ -17,15 +17,6 @@ public class Credential {
         this.userId = userId;
     }
 
-    public void printall(){
-        System.out.println("credentialId: " + this.credentialId.toString());
-        System.out.println("url: " + this.url);
-        System.out.println("userName: " + this.userName);
-        System.out.println("password: " + this.password);
-        System.out.println("key: " + this.key);
-        System.out.println("userId: " + this.userId.toString());
-    }
-
     public Integer getCredentialId() {
         return credentialId;
     }

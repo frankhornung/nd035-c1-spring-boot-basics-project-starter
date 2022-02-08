@@ -506,6 +506,7 @@ class CloudStorageApplicationTests {
 		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
 	}
 
+	// duplicated code from testLargeUpload as i was not sure if i am allowed to adopt the check
 	public void testUpload() {
 		// Create a test account
 		doMockSignUp("Fileupload","Tester","ftest","1234");

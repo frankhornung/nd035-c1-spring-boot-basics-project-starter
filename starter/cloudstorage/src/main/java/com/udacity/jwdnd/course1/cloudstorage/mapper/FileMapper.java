@@ -24,19 +24,4 @@ public interface FileMapper {
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId} AND userId = #{userId}")
     File getFileById(Integer fileId, Integer userId);
 
-/*
-    @Insert("INSERT INTO NOTES (noteId, noteTitle, noteDescription, userId) VALUES(#{noteId}, #{noteTitle}, #{noteDescription}, #{userId})")
-    @Options(useGeneratedKeys = true, keyProperty = "noteId")
-    int insert(Note note);
-
-    @Select("SELECT * FROM NOTES")
-    List<Note> getAllNotes();
-
-    @Select("SELECT * FROM NOTES WHERE userId = #{userId}")
-    List<Note> getAllNotesForUid(Integer userId);
-
-    @Update("UPDATE NOTES SET noteTitle = #{noteTitle}, noteDescription = #{noteDescription}, userId = #{userId} WHERE noteId = #{noteId}")
-    int updateNote(Note note);
-
- */
 }

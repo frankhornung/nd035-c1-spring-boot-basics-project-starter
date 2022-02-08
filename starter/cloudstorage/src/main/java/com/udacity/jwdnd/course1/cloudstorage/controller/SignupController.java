@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// the SignupController base-implementation was re-used from the example's from the udacity lecture (chatapp)
 @Controller()
 @RequestMapping("/signup")
 public class SignupController {
@@ -27,6 +28,7 @@ public class SignupController {
 
     @PostMapping()
     public String signupUser(@ModelAttribute User user, Model model, RedirectAttributes redirectAttributes) {
+
         String signupError = null;
 
         if (!userService.isUsernameAvailable(user.getUsername())) {
@@ -42,7 +44,7 @@ public class SignupController {
 
         if (signupError == null) {
             model.addAttribute("signupSuccess", true);
-            // https://www.baeldung.com/spring-web-flash-attributes
+            // inspired by https://www.baeldung.com/spring-web-flash-attributes
             redirectAttributes.addFlashAttribute("signupSuccess", Boolean.TRUE);
             return "redirect:/login";
         } else {

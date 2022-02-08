@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 @Controller
 public class FileController {
@@ -64,11 +63,9 @@ public class FileController {
         System.out.println("filedelete with fileId param " + fileId);
 
         User currentUser = userService.getUser(authentication.getName());
-        File file = fileService.getFileById(fileId, currentUser.getUserId());
-
         fileService.deleteFileById(fileId, currentUser.getUserId());
-        //return "redirect:/home";
         model.addAttribute("success", "Success");
+
         return "result";
     }
 
@@ -83,12 +80,13 @@ public class FileController {
 
         // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ContentDisposition.html
         ContentDisposition disposition;
-        disposition = ContentDisposition.builder("attachment").name("foo").filename(file.getFilename()).build();
+        disposition = ContentDisposition.builder("attachment").filename(file.getFilename()).build();
         headers.setContentDisposition(disposition);
 
         // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/MediaType.html
         headers.setContentType(MediaType.parseMediaType(file.getContenttype()));
 
+        // READING + INSPIRATION:
         // https://stackoverflow.com/questions/386845/http-headers-for-file-downloads
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
 

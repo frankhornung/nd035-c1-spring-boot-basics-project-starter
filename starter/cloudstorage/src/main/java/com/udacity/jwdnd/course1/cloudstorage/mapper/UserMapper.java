@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+// this file is taken from the udacity review app from the lectures
 @Mapper
 public interface UserMapper {
     @Select("SELECT * FROM USERS WHERE username = #{username}")

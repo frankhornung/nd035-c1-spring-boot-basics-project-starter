@@ -12,12 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
 
 @Controller
-//@RequestMapping("/home")
 public class HomeController {
 
     private final NoteService noteService;
@@ -40,6 +36,7 @@ public class HomeController {
         model.addAttribute("allNotes", noteService.getAllNotesForUid(uid));
         model.addAttribute("allFiles",fileService.getAllFilesForUid(uid));
         model.addAttribute("allCredentials", credentialService.getAllCredentialsForUid(uid));
+        // the credentialService is required in the html model to do the password-deencryption in the edit dialog
         model.addAttribute("credentialService", this.credentialService);
 
         return "home";

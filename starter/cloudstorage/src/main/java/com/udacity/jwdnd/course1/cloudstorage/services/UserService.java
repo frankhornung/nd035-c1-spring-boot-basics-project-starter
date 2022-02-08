@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+// implementation based on the final review app c1-l5
 @Service
 public class UserService {
 
@@ -35,6 +36,5 @@ public class UserService {
     public User getUser(String username) {
         return userMapper.getUser(username);
     }
-
 
 }

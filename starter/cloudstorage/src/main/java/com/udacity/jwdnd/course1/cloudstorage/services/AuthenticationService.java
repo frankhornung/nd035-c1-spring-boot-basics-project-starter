@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+// the base-implementation is taken from the udacity lecture's review example
 @Service
 public class AuthenticationService implements AuthenticationProvider {
     private UserMapper userMapper;
